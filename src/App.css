@@ -5,3 +5,15 @@ img{
 .album{
     text-align: center;
 }
+
+.event{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.event-date{
+    font-weight: bold;
+    font-size: 30px;
+}

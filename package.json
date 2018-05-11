@@ -2,6 +2,7 @@
   "name": "bergson-vision",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3001/",
   "dependencies": {
     "dropbox": "^4.0.1",
     "react": "^16.3.1",
@@ -11,8 +12,13 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-with-api": "concurrently \"react-scripts start\" \"cd ./bergsonv-back/ && nodemon app.js\"",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.1",
+    "nodemon": "^1.17.4"
   }
 }

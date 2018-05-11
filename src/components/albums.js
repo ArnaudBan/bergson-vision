@@ -1,82 +1,16 @@
-import React, { Component } from 'react'
-import { Dropbox } from 'dropbox'
+import React, { Component, PureComponent } from 'react'
 import Slider from 'react-slick'
 
 
 /**
  * Un album correspond a un dossier dans Dropbox
  */
-class Album extends Component {
+class Album extends PureComponent{
 
     constructor(props) {
         super(props)
-        this.state = {
-            images: []
-        }
 
         this.slideChange = this.slideChange.bind( this )
-        this.getImages = this.getImages.bind( this )
-    }
-
-    componentDidMount(){
-        this.getImages()
-    }
-    componentDidUpdate( prevProps ){
-       if( this.state.images.length > 0 && prevProps.album !== this.props.album ){
-           this.setState(
-               { images: [] },
-               this.getImages()
-           )
-       }
-    }
-    getImages(){
-
-        const component = this
-
-        const dbx = new Dropbox({ accessToken: process.env.REACT_APP_DROPBOX_ACCESSTOKEN })
-
-        dbx.filesListFolder({
-            path: this.props.album.path_display,
-        })
-            .then(function(response) {
-
-                const thumbnailBatchEntries = response.entries.filter( function ( file, index ) {
-                    return file['.tag'] === 'file'
-
-                }).map( function( image ){
-                    return {
-                        path: image.path_display,
-                        size: { '.tag': 'w1024h768'}
-                    }
-                })
-
-                dbx.filesGetThumbnailBatch({
-                        entries: thumbnailBatchEntries
-                    })
-                    .then( function(response){
-
-                        const images = response.entries.map( function( file ){
-                                return {
-                                    src: 'data:image/jpg;base64,' + file.thumbnail,
-                                    alt: file.metadata.name,
-                                    width: file.metadata.media_info.metadata.dimensions.width,
-                                    height: file.metadata.media_info.metadata.dimensions.height
-                                }
-                            })
-
-                        component.setState({
-                            images: images
-                        } )
-
-                    })
-                    .catch(function(error) {
-                        console.error(error)
-                    });
-            })
-            .catch(function(error) {
-                console.error(error)
-            });
-
     }
 
     slideChange( oldIndex, newIndex ){
@@ -87,8 +21,7 @@ class Album extends Component {
     }
 
     render(){
-        const { name } = this.props.album
-        const { images } = this.state
+        const { name, images } = this.props.album
 
 
         const sliderSettings = {
@@ -138,16 +71,13 @@ class Albums extends Component {
 
         if( ! albums ){
 
-            const dbx = new Dropbox({ accessToken: process.env.REACT_APP_DROPBOX_ACCESSTOKEN })
-
-            dbx.filesListFolder({
-                path: ''
+            fetch( '/api/albums/')
+            .then(function(response) {
+                return response.json()
             })
             .then(function(response) {
 
-                const foldersList = response.entries.filter( function ( file ) {
-                    return file['.tag'] === 'folder'
-                })
+                const foldersList = response
 
                 localStorage.setItem( 'albums', JSON.stringify( foldersList ) )
                 component.setState({
