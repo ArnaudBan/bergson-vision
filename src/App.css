@@ -17,3 +17,22 @@ img{
     font-weight: bold;
     font-size: 30px;
 }
+
+h1{
+    font-size: 30px;
+    line-height: 35px;
+    margin: 0;
+}
+
+.slick-slider,
+.slick-slide img {
+    max-height: calc( 100vh - 35px );
+}
+.slick-slide img {
+    max-height: calc( 100vh - 35px );
+    width: auto!important;
+}
+
+.slick-dots{
+    bottom: 1em;
+}
