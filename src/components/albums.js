@@ -28,6 +28,7 @@ class Album extends PureComponent{
             autoplay: true,
             dots: true,
             beforeChange: this.slideChange,
+            pauseOnHover: false,
         }
 
         return(
